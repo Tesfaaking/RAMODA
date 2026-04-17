@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>RAMODA | Download Unavailable</title>
+    <!-- Google Fonts + Font Awesome 6 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0f1a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 1.5rem;
+        }
+
+        /* Animated gradient background matching RAMODA style */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 20% 30%, #0f172a, #020617);
+        }
+
+        .bg-animation::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 60%, rgba(249,115,22,0.12), transparent 60%);
+            animation: slowDrift 16s infinite alternate;
+        }
+
+        .bg-animation::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 80%, rgba(251,191,36,0.08), transparent 70%);
+            animation: slowDriftReverse 18s infinite alternate;
+        }
+
+        @keyframes slowDrift {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+            100% { transform: translate(3%, 2%) scale(1.2); opacity: 0.8; }
+        }
+
+        @keyframes slowDriftReverse {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+            100% { transform: translate(-2%, 3%) scale(1.15); opacity: 0.7; }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            background: rgba(251, 191, 36, 0.15);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatParticle 12s ease-in-out infinite;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-20vh) translateX(30px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Back button - matching RAMODA style */
+        .back-button {
+            position: fixed;
+            top: 28px;
+            left: 28px;
+            z-index: 30;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            width: 48px;
+            height: 48px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #fbbf24;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            background: #f97316;
+            color: white;
+            transform: translateX(-4px);
+            border-color: #f97316;
+        }
+
+        /* Dark mode toggle (optional, matches main site) */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 28px;
+            right: 28px;
+            z-index: 30;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            width: 48px;
+            height: 48px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.08) rotate(8deg);
+            background: #f97316;
+        }
+
+        .dark-mode-toggle i {
+            font-size: 1.5rem;
+            color: #fbbf24;
+            transition: all 0.2s;
+        }
+
+        .dark-mode-toggle:hover i {
+            color: white;
+        }
+
+        /* Glassmorphism container */
+        .glass-container {
+            text-align: center;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(18px);
+            padding: 3rem 2.5rem;
+            border-radius: 48px;
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(251, 191, 36, 0.1) inset;
+            max-width: 550px;
+            width: 90%;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            animation: fadeInScale 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+        }
+
+        .glass-container:hover {
+            transform: translateY(-6px);
+            border-color: rgba(251, 191, 36, 0.4);
+            box-shadow: 0 32px 60px -16px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(251, 191, 36, 0.2) inset;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Badge style */
+        .hero-badge {
+            display: inline-block;
+            background: rgba(249, 115, 22, 0.15);
+            backdrop-filter: blur(4px);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Animated warning icon */
+        .warning-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: bounceSoft 2s ease-in-out infinite;
+        }
+
+        @keyframes bounceSoft {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-15px) scale(1.05);
+            }
+        }
+
+        /* Main message */
+        .main-message {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0.5rem 0;
+            background: linear-gradient(135deg, #ffffff, #fbbf24, #f97316);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1.3;
+        }
+
+        /* Subtitle */
+        .sub-message {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-top: 1rem;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Divider line */
+        .divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #fbbf24, transparent);
+            margin: 1.2rem auto;
+        }
+
+        /* Status badge */
+        .status-badge {
+            display: inline-block;
+            background: rgba(251, 191, 36, 0.12);
+            border-radius: 40px;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            margin-top: 1rem;
+        }
+
+        /* Footer note */
+        .footer-note {
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            color: #64748b;
+            opacity: 0.7;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .glass-container {
+                padding: 2rem 1.5rem;
+                border-radius: 36px;
+            }
+            .warning-icon {
+                font-size: 4rem;
+            }
+            .main-message {
+                font-size: 1.4rem;
+            }
+            .sub-message {
+                font-size: 0.85rem;
+            }
+            .back-button, .dark-mode-toggle {
+                width: 42px;
+                height: 42px;
+                top: 18px;
+            }
+            .back-button { left: 18px; }
+            .dark-mode-toggle { right: 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .glass-container {
+                padding: 1.8rem 1.2rem;
+                border-radius: 28px;
+            }
+            .warning-icon {
+                font-size: 3.2rem;
+            }
+            .main-message {
+                font-size: 1.2rem;
+            }
+            .hero-badge {
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-animation"></div>
+
+    <!-- Back button -->
+    <a href="welcome.html" class="back-button" aria-label="Go back">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <!-- Dark Mode Toggle (for consistency) -->
+    <div class="dark-mode-toggle" id="darkModeToggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <!-- Main glass container -->
+    <div class="glass-container">
+        <div class="hero-badge">
+            <i class="fas fa-download"></i> RAMODA APP
+        </div>
+        <div class="warning-icon">
+            🚫
+        </div>
+        <h1 class="main-message">Downloading app is not available now</h1>
+        <div class="divider"></div>
+        <p class="sub-message">
+            We're working hard to bring you an amazing experience.<br>
+            The RAMODA mobile app is currently under development and will be available soon.
+        </p>
+        <div class="status-badge">
+            <i class="fas fa-clock"></i> Coming Soon
+        </div>
+        <div class="footer-note">
+            <i class="fas fa-code-branch"></i> Stay tuned for updates
+        </div>
+    </div>
+
+    <!-- Floating particles -->
+    <div id="particles"></div>
+
+    <script>
+        // Generate floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 8 + 2;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 15 + 8;
+                const delay = Math.random() * 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.opacity = Math.random() * 0.4 + 0.1;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        window.addEventListener('load', () => {
+            createParticles();
+        });
+
+        // Dark mode toggle
+        const darkToggle = document.getElementById('darkModeToggle');
+        const icon = darkToggle.querySelector('i');
+        const savedTheme = localStorage.getItem('ramoda-theme');
+        
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        } else if (savedTheme === 'light') {
+            document.body.classList.remove('dark');
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        } else {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('ramoda-theme', 'dark');
+            }
+        }
+        
+        darkToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark')) {
+                document.body.classList.remove('dark');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('ramoda-theme', 'light');
+            } else {
+                document.body.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('ramoda-theme', 'dark');
+            }
+        });
+    </script>
+</body>
+</html>
