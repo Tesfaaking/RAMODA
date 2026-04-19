@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>RAMODA | Share Your Feedback</title>
+    <link rel="icon" type="image/jpeg" href="photo_2026-04-18_00-36-07.jpg">
     <!-- Google Fonts + Font Awesome 6 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -75,7 +76,7 @@
             padding: 1.5rem;
         }
 
-        /* Premium Background with Unsplash-style tech image */
+        /* Premium Background */
         .bg-image {
             position: fixed;
             top: 0;
@@ -95,7 +96,6 @@
             opacity: 0.2;
         }
 
-        /* Dark gradient overlay */
         .bg-gradient-overlay {
             position: fixed;
             top: 0;
@@ -111,7 +111,6 @@
             background: radial-gradient(circle at 20% 30%, rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.7));
         }
 
-        /* Animated glow effect */
         .animated-glow {
             position: fixed;
             top: 0;
@@ -151,7 +150,7 @@
             100% { transform: translate(-2%, 3%) scale(1.15); opacity: 0.5; }
         }
 
-        /* Sidebar overlay */
+        /* Sidebar styles */
         .sidebar-overlay {
             position: fixed;
             top: 0;
@@ -170,7 +169,6 @@
             visibility: visible;
         }
 
-        /* Sidebar styling */
         #sidebar {
             position: fixed;
             top: 0;
@@ -256,7 +254,7 @@
             transform: translateX(5px);
         }
 
-        /* Menu button (hamburger) */
+        /* Menu and dark mode buttons */
         .menu-btn {
             position: fixed;
             top: 28px;
@@ -290,7 +288,6 @@
             color: white;
         }
 
-        /* Dark mode toggle button */
         .dark-mode-toggle {
             position: fixed;
             top: 28px;
@@ -356,7 +353,6 @@
             }
         }
 
-        /* Hero badge */
         .hero-badge {
             display: inline-block;
             background: rgba(251, 191, 36, 0.15);
@@ -388,7 +384,6 @@
             margin-bottom: 1.8rem;
         }
 
-        /* Input styling */
         .input-group {
             margin-bottom: 1.8rem;
         }
@@ -424,7 +419,6 @@
             box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.2);
         }
 
-        /* Radio group - modern card-style options */
         .radio-label {
             display: block;
             font-size: 0.85rem;
@@ -487,7 +481,6 @@
             font-size: 0.9rem;
         }
 
-        /* Submit button */
         .submit-btn {
             width: 100%;
             background: linear-gradient(105deg, #fbbf24, #f97316);
@@ -517,7 +510,20 @@
             transform: none;
         }
 
-        /* Modal - glassmorphism */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -587,7 +593,18 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Responsive */
+        /* Success message inline */
+        .success-message {
+            background: rgba(34, 197, 94, 0.9);
+            color: white;
+            padding: 1rem;
+            border-radius: 16px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
         @media (max-width: 550px) {
             .glass-card {
                 padding: 1.8rem;
@@ -615,20 +632,16 @@
     </style>
 </head>
 <body>
-    <!-- Premium Background -->
     <div class="bg-image"></div>
     <div class="bg-gradient-overlay"></div>
     <div class="animated-glow"></div>
 
-    <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Menu button (hamburger) -->
     <div class="menu-btn" id="openSidebar" aria-label="Open menu">
         <i class="fas fa-bars"></i>
     </div>
 
-    <!-- Sidebar Navigation -->
     <div id="sidebar">
         <div class="sidebar-header">
             <span class="logo-side"><i class="fas fa-cube"></i> RAMODA</span>
@@ -642,7 +655,6 @@
         <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
     </div>
 
-    <!-- Dark Mode Toggle -->
     <div class="dark-mode-toggle" id="darkModeToggle">
         <i class="fas fa-moon"></i>
     </div>
@@ -655,50 +667,56 @@
         <h1>Share Your Feedback</h1>
         <p class="subtitle">Help us build better software — your insights drive our innovation.</p>
 
-        <div class="input-group">
-            <label><i class="fas fa-user"></i> Your Name *</label>
-            <input type="text" id="userName" placeholder="Enter your name">
-        </div>
-
-        <div class="input-group">
-            <label><i class="fas fa-envelope"></i> Your Email *</label>
-            <input type="email" id="userEmail" placeholder="Enter your email address">
-        </div>
-
-        <div class="input-group">
-            <label><i class="fas fa-comment"></i> Your comments *</label>
-            <textarea id="comments" placeholder="Tell us about your experience, suggestions, or any issues you encountered..."></textarea>
-        </div>
-
-        <div>
-            <label class="radio-label"><i class="fas fa-star"></i> How do you rate your experience? *</label>
-            <div class="radio-group" id="radioGroup">
-                <label class="radio-option">
-                    <input type="radio" name="feedback" value="Bad">
-                    <span class="radio-card"><i class="fas fa-frown"></i> Bad</span>
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="feedback" value="Not Bad">
-                    <span class="radio-card"><i class="fas fa-meh"></i> Not Bad</span>
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="feedback" value="Great">
-                    <span class="radio-card"><i class="fas fa-smile"></i> Great</span>
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="feedback" value="Very Good">
-                    <span class="radio-card"><i class="fas fa-laugh-beam"></i> Very Good</span>
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="feedback" value="EXCELLENT">
-                    <span class="radio-card"><i class="fas fa-crown"></i> EXCELLENT</span>
-                </label>
+        <form id="feedbackForm">
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> Your Name *</label>
+                <input type="text" id="userName" name="name" placeholder="Enter your name" required>
             </div>
-        </div>
 
-        <button class="submit-btn" id="sendBtn">
-            <i class="fas fa-paper-plane"></i> Send Feedback
-        </button>
+            <div class="input-group">
+                <label><i class="fas fa-envelope"></i> Your Email *</label>
+                <input type="email" id="userEmail" name="email" placeholder="Enter your email address" required>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-comment"></i> Your comments *</label>
+                <textarea id="comments" name="comments" placeholder="Tell us about your experience, suggestions, or any issues you encountered..." required></textarea>
+            </div>
+
+            <div>
+                <label class="radio-label"><i class="fas fa-star"></i> How do you rate your experience? *</label>
+                <div class="radio-group" id="radioGroup">
+                    <label class="radio-option">
+                        <input type="radio" name="feedback" value="Bad" required>
+                        <span class="radio-card"><i class="fas fa-frown"></i> Bad</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="feedback" value="Not Bad">
+                        <span class="radio-card"><i class="fas fa-meh"></i> Not Bad</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="feedback" value="Great">
+                        <span class="radio-card"><i class="fas fa-smile"></i> Great</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="feedback" value="Very Good">
+                        <span class="radio-card"><i class="fas fa-laugh-beam"></i> Very Good</span>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="feedback" value="EXCELLENT">
+                        <span class="radio-card"><i class="fas fa-crown"></i> EXCELLENT</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="sendBtn">
+                <i class="fas fa-paper-plane"></i> Send Feedback
+            </button>
+            
+            <div id="inlineSuccess" class="success-message">
+                <i class="fas fa-check-circle"></i> Thank you! Your feedback has been sent!
+            </div>
+        </form>
     </div>
 
     <!-- Success Modal -->
@@ -764,35 +782,18 @@
             }
         });
 
-        // Function to send email via mailto
-        function sendFeedbackEmail(name, email, rating, comments) {
-            const to = 'aabbcc162112@gmail.com';
-            const subject = `RAMODA Feedback from ${name}`;
-            const body = `New Feedback from RAMODA Website\n\n` +
-                         `Name: ${name}\n` +
-                         `Email: ${email}\n` +
-                         `Rating: ${rating}\n\n` +
-                         `Comments:\n${comments}\n\n` +
-                         `---\nSent via RAMODA Feedback Page\nDate: ${new Date().toLocaleString()}`;
-            
-            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoLink;
-            return true;
-        }
-
-        // Form submission
-        const sendBtn = document.getElementById('sendBtn');
-        const userNameInput = document.getElementById('userName');
-        const userEmailInput = document.getElementById('userEmail');
-        const commentsTextarea = document.getElementById('comments');
+        // Form submission - Working mailto method
+        const form = document.getElementById('feedbackForm');
         const successModal = document.getElementById('successModal');
         const errorModal = document.getElementById('errorModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const closeErrorBtn = document.getElementById('closeErrorBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const inlineSuccess = document.getElementById('inlineSuccess');
 
         function closeSuccessModal() {
             successModal.style.display = 'none';
-            window.location.href = 'welcome.html';
+            form.reset();
         }
 
         function closeErrorModalFunc() {
@@ -807,50 +808,88 @@
             if (event.target === errorModal) closeErrorModalFunc();
         });
 
-        sendBtn.addEventListener('click', () => {
-            const userName = userNameInput.value.trim();
-            const userEmail = userEmailInput.value.trim();
-            const comments = commentsTextarea.value.trim();
-            const selectedFeedback = document.querySelector('input[name="feedback"]:checked');
+        // Hide inline success after 5 seconds
+        if (inlineSuccess) {
+            setTimeout(() => {
+                inlineSuccess.style.display = 'none';
+            }, 5000);
+        }
 
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const userName = document.getElementById('userName').value.trim();
+            const userEmail = document.getElementById('userEmail').value.trim();
+            const comments = document.getElementById('comments').value.trim();
+            const selectedFeedback = document.querySelector('input[name="feedback"]:checked');
+            
+            // Validation
             if (!userName) {
                 errorModal.style.display = 'flex';
                 return;
             }
-
+            
             if (!userEmail) {
                 errorModal.style.display = 'flex';
                 return;
             }
-
+            
             if (!userEmail.includes('@') || !userEmail.includes('.')) {
-                alert('Please enter a valid email address.');
+                alert('Please enter a valid email address (e.g., name@example.com)');
                 return;
             }
-
+            
             if (!comments) {
                 errorModal.style.display = 'flex';
                 return;
             }
-
+            
             if (!selectedFeedback) {
                 errorModal.style.display = 'flex';
                 return;
             }
-
+            
             const rating = selectedFeedback.value;
-
-            // Send email via mailto
-            sendFeedbackEmail(userName, userEmail, rating, comments);
+            
+            // Show loading state
+            const originalBtnText = sendBtn.innerHTML;
+            sendBtn.innerHTML = '<span class="loading-spinner"></span> Opening Email...';
+            sendBtn.disabled = true;
+            
+            // Create email content with proper encoding
+            const recipient = 'aabbcc162112@gmail.com';
+            const subject = `RAMODA Feedback from ${userName}`;
+            const body = `Name: ${userName}%0A%0AEmail: ${userEmail}%0A%0ARating: ${rating}%0A%0AComments:%0A${encodeURIComponent(comments)}%0A%0A---%0ASent via RAMODA Feedback Page%0ADate: ${new Date().toLocaleString()}`;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${body}`;
+            
+            // Try to open email client
+            window.location.href = mailtoLink;
+            
+            // Reset button after a short delay
+            setTimeout(() => {
+                sendBtn.innerHTML = originalBtnText;
+                sendBtn.disabled = false;
+            }, 1000);
             
             // Show success modal
             successModal.style.display = 'flex';
             
             // Reset form
-            userNameInput.value = '';
-            userEmailInput.value = '';
-            commentsTextarea.value = '';
+            document.getElementById('userName').value = '';
+            document.getElementById('userEmail').value = '';
+            document.getElementById('comments').value = '';
             if (selectedFeedback) selectedFeedback.checked = false;
+            
+            // Show inline success message
+            if (inlineSuccess) {
+                inlineSuccess.style.display = 'block';
+                setTimeout(() => {
+                    inlineSuccess.style.display = 'none';
+                }, 5000);
+            }
         });
 
         // Dark mode toggle

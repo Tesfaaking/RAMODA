@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>RAMODA | Contact Us</title>
+    <link rel="icon" type="image/jpeg" href="photo_2026-04-18_00-36-07.jpg">
     <!-- Google Fonts + Font Awesome 6 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -415,6 +416,7 @@
             transform: translateY(-50%);
             color: var(--accent-light);
             font-size: 1rem;
+            z-index: 1;
         }
 
         .input-group textarea ~ i {
@@ -476,6 +478,20 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Footer */
@@ -607,6 +623,7 @@
         <a href="sites.html"><i class="fas fa-cog"></i> Services</a>
         <a href="partnership.html"><i class="fas fa-handshake"></i> Partnership</a>
         <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
+        <a href="comment.html"><i class="fas fa-comment-dots"></i> Feedback</a>
     </div>
 
     <!-- Dark Mode Toggle -->
@@ -633,26 +650,28 @@
                 <p>We'd love to hear from you — let's build the future together</p>
             </div>
 
-            <div class="contact-body">
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input type="text" id="name" placeholder="Full Name">
-                </div>
+            <form id="contactForm">
+                <div class="contact-body">
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="name" name="name" placeholder="Full Name" required>
+                    </div>
 
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" placeholder="Email Address">
-                </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Email Address" required>
+                    </div>
 
-                <div class="input-group">
-                    <i class="fas fa-comment"></i>
-                    <textarea id="message" placeholder="Tell us about your project or inquiry..."></textarea>
-                </div>
+                    <div class="input-group">
+                        <i class="fas fa-comment"></i>
+                        <textarea id="message" name="message" placeholder="Tell us about your project or inquiry..." required></textarea>
+                    </div>
 
-                <button class="submit-btn" id="sendBtn">
-                    <i class="fas fa-paper-plane"></i> Send Message
-                </button>
-            </div>
+                    <button type="submit" class="submit-btn" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </div>
+            </form>
 
             <div class="contact-footer">
                 <i class="far fa-copyright"></i> RAMODA Technologies — Innovate. Transform. Lead.
@@ -723,34 +742,17 @@
             }
         });
 
-        // Function to send email via mailto
-        function sendEmail(name, email, message) {
-            const to = 'aabbcc162112@gmail.com';
-            const subject = `Contact Form Message from ${name}`;
-            const body = `New message from RAMODA Contact Form\n\n` +
-                         `Name: ${name}\n` +
-                         `Email: ${email}\n\n` +
-                         `Message:\n${message}\n\n` +
-                         `---\nSent via RAMODA Contact Page\nDate: ${new Date().toLocaleString()}`;
-            
-            const mailtoLink = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            window.location.href = mailtoLink;
-            return true;
-        }
-
-        // Form submission
-        const sendBtn = document.getElementById('sendBtn');
-        const nameInput = document.getElementById('name');
-        const emailInput = document.getElementById('email');
-        const messageInput = document.getElementById('message');
+        // Form submission with mailto (works on all devices)
+        const form = document.getElementById('contactForm');
         const successModal = document.getElementById('successModal');
         const errorModal = document.getElementById('errorModal');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const closeErrorBtn = document.getElementById('closeErrorBtn');
+        const sendBtn = document.getElementById('sendBtn');
 
         function closeSuccessModal() {
             successModal.style.display = 'none';
-            window.location.href = 'welcome.html';
+            form.reset();
         }
 
         function closeErrorModalFunc() {
@@ -765,31 +767,54 @@
             if (event.target === errorModal) closeErrorModalFunc();
         });
 
-        sendBtn.addEventListener('click', () => {
-            const name = nameInput.value.trim();
-            const email = emailInput.value.trim();
-            const message = messageInput.value.trim();
-
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+            
+            // Validation
             if (!name || !email || !message) {
                 errorModal.style.display = 'flex';
                 return;
             }
-
+            
             if (!email.includes('@') || !email.includes('.')) {
-                alert('Please enter a valid email address.');
+                alert('Please enter a valid email address (e.g., name@example.com)');
                 return;
             }
-
-            // Send email via mailto
-            sendEmail(name, email, message);
+            
+            // Show loading state
+            const originalBtnText = sendBtn.innerHTML;
+            sendBtn.innerHTML = '<span class="loading-spinner"></span> Opening Email...';
+            sendBtn.disabled = true;
+            
+            // Create email content with proper encoding
+            const recipient = 'aabbcc162112@gmail.com';
+            const subject = `RAMODA Contact Form Message from ${name}`;
+            const body = `Name: ${name}%0A%0AEmail: ${email}%0A%0AMessage:%0A${encodeURIComponent(message)}%0A%0A---%0ASent via RAMODA Contact Page%0ADate: ${new Date().toLocaleString()}`;
+            
+            // Create mailto link
+            const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${body}`;
+            
+            // Try to open email client
+            window.location.href = mailtoLink;
+            
+            // Reset button after a short delay
+            setTimeout(() => {
+                sendBtn.innerHTML = originalBtnText;
+                sendBtn.disabled = false;
+            }, 1000);
             
             // Show success modal
             successModal.style.display = 'flex';
             
             // Reset form
-            nameInput.value = '';
-            emailInput.value = '';
-            messageInput.value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('message').value = '';
         });
 
         // Dark mode toggle

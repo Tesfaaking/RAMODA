@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>RAMODA | Partnership Program</title>
+    <link rel="icon" type="image/jpeg" href="photo_2026-04-18_00-36-07.jpg">
     <!-- Google Fonts + Font Awesome 6 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -450,6 +451,20 @@
             transform: none;
         }
 
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         /* Note & thank you */
         .note {
             text-align: center;
@@ -490,6 +505,10 @@
             border: 1px solid var(--accent-light);
             animation: slideUp 0.3s ease;
         }
+        .modal-content i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
         .modal-content h2 {
             font-size: 1.8rem;
             margin-bottom: 1rem;
@@ -497,6 +516,10 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
+        }
+        .modal-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
         }
         .modal-content button {
             background: linear-gradient(105deg, #fbbf24, #f97316);
@@ -506,7 +529,6 @@
             font-weight: 600;
             border: none;
             cursor: pointer;
-            margin-top: 1rem;
         }
 
         /* Animations */
@@ -640,8 +662,22 @@
     </div>
 
     <!-- Modals -->
-    <div id="successModal" class="modal"><div class="modal-content"><i class="fas fa-check-circle" style="font-size: 3rem; color: #fbbf24;"></i><h2>Application Sent!</h2><p>Your partnership request has been sent to aabbcc162112@gmail.com. We will contact you soon!</p><button onclick="closeModal('successModal')">Continue</button></div></div>
-    <div id="errorModal" class="modal"><div class="modal-content"><i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #f97316;"></i><h2>Missing Information</h2><p>Please fill in all required fields before submitting.</p><button onclick="closeModal('errorModal')">Try Again</button></div></div>
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-check-circle" style="color: #fbbf24;"></i>
+            <h2>Application Sent!</h2>
+            <p>Your partnership request has been sent to aabbcc162112@gmail.com. We will contact you soon!</p>
+            <button onclick="closeSuccessModal()">Continue</button>
+        </div>
+    </div>
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-exclamation-triangle" style="color: #f97316;"></i>
+            <h2>Missing Information</h2>
+            <p>Please fill in all required fields before submitting.</p>
+            <button onclick="closeErrorModal()">Try Again</button>
+        </div>
+    </div>
 
     <script>
         // Sidebar functionality
@@ -718,6 +754,34 @@
         });
         setActiveType('individual');
 
+        // Modal functions
+        const successModal = document.getElementById('successModal');
+        const errorModal = document.getElementById('errorModal');
+
+        function closeSuccessModal() {
+            successModal.style.display = 'none';
+            // Reset form
+            document.getElementById('partnershipForm').reset();
+            document.getElementById('fullName').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('address').value = '';
+            document.getElementById('descriptionIndividual').value = '';
+            document.getElementById('companyName').value = '';
+            document.getElementById('companyPhone').value = '';
+            document.getElementById('companyEmail').value = '';
+            document.getElementById('companyAddress').value = '';
+            document.getElementById('descriptionCompany').value = '';
+            document.getElementById('category').value = 'transport';
+            document.getElementById('otherCategoryInput').value = '';
+            otherCategoryDiv.style.display = 'none';
+            setActiveType('individual');
+        }
+
+        function closeErrorModal() {
+            errorModal.style.display = 'none';
+        }
+
         // Function to send email via mailto
         function sendEmail(formData, isIndividual) {
             const to = 'aabbcc162112@gmail.com';
@@ -758,80 +822,57 @@
             let formData = {};
             let isValid = true;
 
+            // Show loading state
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Opening Email...';
+            submitBtn.disabled = true;
+
             if (isIndividual) {
                 const name = document.getElementById('fullName').value.trim();
                 const phone = document.getElementById('phone').value.trim();
                 const email = document.getElementById('email').value.trim();
                 const address = document.getElementById('address').value;
-                const description = document.getElementById('descriptionIndividual').value;
+                const description = document.getElementById('descriptionIndividual').value.trim();
                 
-                if (!name || !phone || !email) {
+                if (!name || !phone || !email || !description) {
                     isValid = false;
-                    showModal('errorModal');
+                    errorModal.style.display = 'flex';
                 } else if (!email.includes('@') || !email.includes('.')) {
                     alert('Please enter a valid email address');
                     isValid = false;
                 } else {
                     formData = { name, phone, email, address, description };
                     sendEmail(formData, true);
-                    showModal('successModal');
-                    
-                    // Reset form
-                    document.getElementById('fullName').value = '';
-                    document.getElementById('phone').value = '';
-                    document.getElementById('email').value = '';
-                    document.getElementById('address').value = '';
-                    document.getElementById('descriptionIndividual').value = '';
+                    successModal.style.display = 'flex';
                 }
             } else {
                 const companyName = document.getElementById('companyName').value.trim();
                 const phone = document.getElementById('companyPhone').value.trim();
                 const email = document.getElementById('companyEmail').value.trim();
                 const address = document.getElementById('companyAddress').value;
-                const description = document.getElementById('descriptionCompany').value;
+                const description = document.getElementById('descriptionCompany').value.trim();
                 const category = categorySelect.value;
                 const otherCategory = document.getElementById('otherCategoryInput').value;
                 
-                if (!companyName || !phone || !email) {
+                if (!companyName || !phone || !email || !description) {
                     isValid = false;
-                    showModal('errorModal');
+                    errorModal.style.display = 'flex';
                 } else if (!email.includes('@') || !email.includes('.')) {
                     alert('Please enter a valid email address');
                     isValid = false;
                 } else {
                     formData = { companyName, phone, email, address, description, category, otherCategory };
                     sendEmail(formData, false);
-                    showModal('successModal');
-                    
-                    // Reset form
-                    document.getElementById('companyName').value = '';
-                    document.getElementById('companyPhone').value = '';
-                    document.getElementById('companyEmail').value = '';
-                    document.getElementById('companyAddress').value = '';
-                    document.getElementById('descriptionCompany').value = '';
-                    document.getElementById('category').value = 'transport';
-                    document.getElementById('otherCategoryInput').value = '';
-                    otherCategoryDiv.style.display = 'none';
+                    successModal.style.display = 'flex';
                 }
             }
-        });
 
-        function showModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.style.display = 'flex';
-            if (modalId === 'successModal') {
-                setTimeout(() => {
-                    window.location.href = 'welcome.html';
-                }, 4000);
-            }
-        }
-        
-        window.closeModal = function(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-            if (modalId === 'successModal') {
-                window.location.href = 'welcome.html';
-            }
-        };
+            // Reset button after delay
+            setTimeout(() => {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }, 1000);
+        });
 
         // Dark mode toggle
         const darkToggle = document.getElementById('darkModeToggle');
