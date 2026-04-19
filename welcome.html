@@ -1,950 +1,628 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>RAMODA | Next-Gen Software Technology</title>
-    <link rel="icon" type="image/jpeg" href="photo_2026-04-18_00-36-07.jpg">
-    <!-- Google Fonts + Font Awesome 6 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* CSS Variables for light/dark mode */
-        :root {
-            --bg-primary: #f8fafc;
-            --bg-surface: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #334155;
-            --text-muted: #475569;
-            --border-light: #e2e8f0;
-            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
-            --card-hover-shadow: 0 20px 35px rgba(0, 0, 0, 0.08);
-            --accent: #f97316;
-            --accent-light: #fbbf24;
-            --accent-dark: #ea580c;
-            --btn-primary-bg: #0f172a;
-            --btn-primary-hover: #f97316;
-            --overlay-bg: rgba(0, 0, 0, 0.4);
-            --sidebar-bg: rgba(15, 23, 42, 0.96);
-            --menu-btn-bg: white;
-            --hero-gradient-start: #0f172a;
-            --hero-gradient-end: #334155;
-            --stat-card-bg: white;
-            --highlight-bg: linear-gradient(115deg, #ffffff, #fff7ed);
-            --footer-text: #64748b;
-            --service-card-bg: white;
-        }
-
-        body.dark {
-            --bg-primary: #0a0f1a;
-            --bg-surface: #111827;
-            --text-primary: #f1f5f9;
-            --text-secondary: #cbd5e1;
-            --text-muted: #94a3b8;
-            --border-light: #1e293b;
-            --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-            --card-hover-shadow: 0 20px 35px rgba(0, 0, 0, 0.4);
-            --btn-primary-bg: #fbbf24;
-            --btn-primary-hover: #f97316;
-            --overlay-bg: rgba(0, 0, 0, 0.7);
-            --sidebar-bg: rgba(0, 0, 0, 0.92);
-            --menu-btn-bg: #1e293b;
-            --hero-gradient-start: #fbbf24;
-            --hero-gradient-end: #f97316;
-            --stat-card-bg: #1e293b;
-            --highlight-bg: linear-gradient(115deg, #1e293b, #0f172a);
-            --footer-text: #94a3b8;
-            --service-card-bg: #1e293b;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            transition: background-color 0.3s ease, color 0.2s ease;
-        }
-
-        /* Beautiful Background Image with overlay */
-        .bg-image {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0.12;
-            transition: opacity 0.3s ease;
-        }
-
-        body.dark .bg-image {
-            opacity: 0.08;
-        }
-
-        /* Gradient overlay for better readability */
-        .bg-gradient-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 20% 30%, rgba(59,130,246,0.06), transparent 80%);
-            pointer-events: none;
-        }
-
-        body.dark .bg-gradient-overlay {
-            background: radial-gradient(circle at 20% 30%, rgba(251,191,36,0.06), transparent 80%);
-        }
-
-        /* Dark mode toggle button */
-        .dark-mode-toggle {
-            position: fixed;
-            top: 28px;
-            right: 28px;
-            z-index: 25;
-            background: var(--menu-btn-bg);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-            width: 48px;
-            height: 48px;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
-            border: 1px solid rgba(0,0,0,0.08);
-            backdrop-filter: blur(8px);
-        }
-
-        body.dark .dark-mode-toggle {
-            background: #1e293b;
-            border-color: rgba(255,255,255,0.1);
-        }
-
-        .dark-mode-toggle:hover {
-            transform: scale(1.08) rotate(8deg);
-            background: var(--accent);
-        }
-
-        .dark-mode-toggle i {
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            transition: all 0.2s;
-        }
-
-        .dark-mode-toggle:hover i {
-            color: white;
-        }
-
-        /* Sidebar overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--overlay-bg);
-            backdrop-filter: blur(4px);
-            z-index: 15;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Sidebar */
-        #sidebar {
-            position: fixed;
-            top: 0;
-            left: -320px;
-            width: 300px;
-            height: 100%;
-            background: var(--sidebar-bg);
-            backdrop-filter: blur(20px);
-            z-index: 20;
-            transition: left 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            padding: 2rem 1.5rem;
-            box-shadow: 8px 0 32px rgba(0, 0, 0, 0.3);
-            border-right: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            flex-direction: column;
-        }
-
-        #sidebar.active {
-            left: 0;
-        }
-
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo-side {
-            font-weight: 800;
-            font-size: 1.6rem;
-            background: linear-gradient(120deg, var(--accent-light), var(--accent));
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .closebtn {
-            background: rgba(255,255,240,0.1);
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            font-size: 1.4rem;
-            cursor: pointer;
-            color: #cbd5e1;
-            transition: all 0.2s;
-        }
-
-        .closebtn:hover {
-            background: var(--accent);
-            color: white;
-            transform: rotate(90deg);
-        }
-
-        #sidebar a {
-            padding: 0.9rem 1rem;
-            margin: 0.3rem 0;
-            border-radius: 16px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.05rem;
-            color: #e2e8f0;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            transition: all 0.2s;
-        }
-
-        #sidebar a i {
-            width: 28px;
-            font-size: 1.25rem;
-            color: var(--accent-light);
-        }
-
-        #sidebar a:hover {
-            background: rgba(251, 191, 36, 0.15);
-            color: var(--accent-light);
-            transform: translateX(5px);
-        }
-
-        /* menu button */
-        .menu-btn {
-            position: fixed;
-            top: 28px;
-            left: 28px;
-            z-index: 25;
-            background: var(--menu-btn-bg);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            width: 48px;
-            height: 48px;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.25s;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .menu-btn i {
-            font-size: 1.7rem;
-            color: var(--text-primary);
-        }
-
-        .menu-btn:hover {
-            background: var(--accent);
-            transform: scale(0.96);
-        }
-
-        .menu-btn:hover i {
-            color: white;
-        }
-
-        /* Main content */
-        .main-content {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 6rem 2rem 4rem 2rem;
-            position: relative;
-        }
-
-        /* Hero section with image */
-        .hero-section {
-            margin-bottom: 2.5rem;
-            animation: fadeUp 0.7s ease-out;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 3rem;
-        }
-
-        .hero-content {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .hero-image {
-            flex: 1;
-            min-width: 280px;
-            text-align: center;
-        }
-
-        .hero-image img {
-            max-width: 100%;
-            border-radius: 32px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border: 2px solid rgba(251, 191, 36, 0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .hero-image img:hover {
-            transform: scale(1.02);
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: rgba(251, 191, 36, 0.15);
-            backdrop-filter: blur(4px);
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--accent);
-            letter-spacing: 0.3px;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(251,191,36,0.3);
-        }
-
-        h1 {
-            font-size: 3.8rem;
-            font-weight: 800;
-            line-height: 1.2;
-            background: linear-gradient(to right, var(--hero-gradient-start), var(--hero-gradient-end));
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.02em;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, var(--accent), var(--accent-light));
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-
-        .lead-text {
-            font-size: 1.25rem;
-            line-height: 1.5;
-            color: var(--text-secondary);
-            max-width: 85%;
-            margin-bottom: 1.5rem;
-        }
-
-        /* Stats Cards */
-        .stats-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.8rem;
-            margin: 2rem 0 2rem;
-        }
-
-        .stat-card {
-            background: var(--stat-card-bg);
-            padding: 1.4rem 1.8rem;
-            border-radius: 28px;
-            box-shadow: var(--card-shadow);
-            flex: 1;
-            min-width: 160px;
-            border: 1px solid var(--border-light);
-            transition: all 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--card-hover-shadow);
-            border-color: var(--accent-light);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--accent);
-        }
-
-        /* Service Cards with Images */
-        .services-showcase {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin: 2.5rem 0;
-        }
-
-        .service-card {
-            background: var(--service-card-bg);
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: var(--card-shadow);
-            transition: all 0.35s ease;
-            border: 1px solid var(--border-light);
-        }
-
-        .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--card-hover-shadow);
-            border-color: var(--accent-light);
-        }
-
-        .service-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .service-card:hover .service-img {
-            transform: scale(1.05);
-        }
-
-        .service-content {
-            padding: 1.5rem;
-        }
-
-        .service-icon {
-            font-size: 2.2rem;
-            color: var(--accent);
-            margin-bottom: 0.8rem;
-        }
-
-        .service-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .service-card p {
-            color: var(--text-secondary);
-            line-height: 1.5;
-            font-size: 0.95rem;
-        }
-
-        .description {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .highlight-card {
-            background: var(--highlight-bg);
-            border-left: 5px solid var(--accent-light);
-            border-radius: 24px;
-            padding: 1.6rem;
-            margin: 1.8rem 0;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.2s;
-        }
-
-        .highlight-card:hover {
-            transform: translateY(-3px);
-        }
-
-        /* Buttons */
-        .buttons-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 2rem 0 1.5rem;
-        }
-
-        .btn {
-            padding: 0.9rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.25s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: var(--btn-primary-bg);
-            color: white;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
-        }
-
-        .btn-primary:hover {
-            background: var(--btn-primary-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 12px 20px rgba(249,115,22,0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid var(--text-primary);
-            color: var(--text-primary);
-        }
-
-        .btn-outline:hover {
-            background: var(--text-primary);
-            color: var(--bg-primary);
-            transform: translateY(-2px);
-        }
-
-        /* Testimonial Section */
-        .testimonial-section {
-            margin: 3rem 0;
-            padding: 2rem;
-            background: var(--service-card-bg);
-            border-radius: 32px;
-            border: 1px solid var(--border-light);
-        }
-
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.8rem;
-            margin-top: 1.5rem;
-        }
-
-        .testimonial-card {
-            padding: 1.5rem;
-            border-radius: 20px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-light);
-            transition: all 0.3s;
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-light);
-        }
-
-        .testimonial-text {
-            font-style: italic;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .testimonial-author img {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent-light);
-        }
-
-        .author-name {
-            font-weight: 700;
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
-
-        .author-title {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        /* Social Section */
-        .social-section {
-            margin-top: 3.5rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .social-title {
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-muted);
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 1.8rem;
-            flex-wrap: wrap;
-        }
-
-        .social-icons a {
-            color: var(--text-muted);
-            transition: all 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .social-icons a i {
-            font-size: 1.6rem;
-        }
-
-        .social-icons a:hover {
-            color: var(--accent);
-            transform: translateY(-3px);
-        }
-
-        .footer-note {
-            text-align: center;
-            margin-top: 3rem;
-            font-size: 0.8rem;
-            color: var(--footer-text);
-        }
-
-        /* Animations */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-up {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-
-        .fade-up.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            h1 { font-size: 2.8rem; }
-            .lead-text { max-width: 100%; }
-            .main-content { padding: 5rem 1.5rem 3rem; }
-            .hero-section { flex-direction: column; text-align: center; }
-            .hero-content { text-align: center; }
-            .lead-text { margin-left: auto; margin-right: auto; }
-        }
-
-        @media (max-width: 640px) {
-            h1 { font-size: 2.2rem; }
-            .menu-btn, .dark-mode-toggle { width: 42px; height: 42px; top: 20px; }
-            .menu-btn { left: 20px; }
-            .dark-mode-toggle { right: 20px; }
-            .stat-card { min-width: 100%; }
-            .btn { padding: 0.7rem 1.5rem; }
-            #sidebar { width: 85%; left: -85%; }
-            .services-showcase { grid-template-columns: 1fr; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Nephron 3D | Immersive Renal Physiology</title>
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Three.js Core -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+      }
+    }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #071a1a;
+      color: #eef4ff;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #0a2a2a; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #3ecf8e; border-radius: 10px; }
+
+    /* 3D canvas fixed background */
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Content overlay */
+    .content {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Glassmorphism Nav */
+    nav {
+      background: rgba(10, 30, 30, 0.75);
+      backdrop-filter: blur(12px);
+      padding: 18px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(62, 207, 142, 0.3);
+      transition: all 0.3s;
+    }
+    nav .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 28px;
+    }
+    nav a {
+      color: #e0f2fe;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+      position: relative;
+      padding: 5px 0;
+    }
+    nav a i { margin-right: 8px; }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #3ecf8e;
+      transition: width 0.3s;
+    }
+    nav a:hover::after { width: 100%; }
+    nav a:hover { color: #3ecf8e; transform: translateY(-2px); }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* Hero Section - Premium Glass with custom illustration */
+    .hero {
+      background: rgba(15, 35, 35, 0.55);
+      backdrop-filter: blur(12px);
+      border-radius: 48px;
+      padding: 50px 40px;
+      margin-bottom: 50px;
+      text-align: center;
+      border: 1px solid rgba(62, 207, 142, 0.3);
+      box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
+      transition: transform 0.4s ease;
+      animation: fadeInUp 0.8s ease-out;
+    }
+    .hero:hover { transform: scale(1.01); }
+    h1 {
+      font-size: 3.8rem;
+      background: linear-gradient(135deg, #FFFFFF, #3ecf8e, #6ee7b7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+    .hero-illustration {
+      margin-top: 35px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .hero-card {
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 15px 25px;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid #3ecf8e55;
+    }
+    .hero-card i {
+      font-size: 2.2rem;
+      color: #3ecf8e;
+    }
+    .hero-stats {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .hero svg {
+      max-width: 280px;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4));
+    }
+
+    /* Section cards */
+    .section {
+      background: rgba(10, 28, 28, 0.7);
+      backdrop-filter: blur(8px);
+      margin-bottom: 48px;
+      border-radius: 32px;
+      padding: 40px;
+      border: 1px solid rgba(62, 207, 142, 0.2);
+      transition: all 0.4s;
+      animation: fadeInUp 0.6s ease backwards;
+    }
+    .section:nth-child(2) { animation-delay: 0.1s; }
+    .section:nth-child(3) { animation-delay: 0.2s; }
+    .section:nth-child(4) { animation-delay: 0.3s; }
+    .section:nth-child(5) { animation-delay: 0.4s; }
+
+    h2 {
+      font-size: 2.2rem;
+      color: #3ecf8e;
+      border-left: 6px solid #3ecf8e;
+      padding-left: 20px;
+      margin-bottom: 30px;
+      font-weight: 700;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+      margin-top: 20px;
+    }
+    .card {
+      background: rgba(20, 45, 45, 0.6);
+      backdrop-filter: blur(4px);
+      border-radius: 28px;
+      padding: 24px;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      border: 1px solid rgba(62, 207, 142, 0.2);
+      overflow: hidden;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      border-color: #3ecf8e;
+      box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+      background: rgba(30, 60, 60, 0.7);
+    }
+    .card svg, .card img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      border-radius: 20px;
+      margin: 15px 0 10px;
+      transition: transform 0.5s;
+      background: rgba(0,0,0,0.2);
+      padding: 8px;
+    }
+    .card:hover svg { transform: scale(1.02); }
+    .card h3 {
+      font-size: 1.7rem;
+      color: #b3ffd9;
+      margin-bottom: 12px;
+    }
+    .card p { color: #cfecf0; line-height: 1.5; }
+
+    /* diagram interactive zone */
+    .diagram-wrapper {
+      background: rgba(0,0,0,0.4);
+      border-radius: 32px;
+      padding: 20px;
+      text-align: center;
+    }
+    .diagram {
+      position: relative;
+      max-width: 800px;
+      margin: 20px auto;
+    }
+    .diagram svg {
+      width: 100%;
+      border-radius: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      background: #fefef5;
+    }
+    .label {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      color: #3ecf8e;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 40px;
+      pointer-events: none;
+      border-left: 3px solid #3ecf8e;
+      transition: 0.2s;
+    }
+
+    /* quiz premium */
+    .quiz-container {
+      background: rgba(10, 28, 28, 0.8);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 40px;
+      border: 1px solid #3ecf8e55;
+    }
+    .question {
+      background: rgba(25, 55, 55, 0.6);
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 24px;
+      border-left: 4px solid #3ecf8e;
+      transition: 0.2s;
+    }
+    .question p { font-weight: 700; font-size: 1.1rem; margin-bottom: 12px; }
+    input[type="radio"] {
+      accent-color: #3ecf8e;
+      margin-right: 10px;
+      transform: scale(1.1);
+    }
+    button {
+      background: linear-gradient(95deg, #2c9c6e, #1f6e4a);
+      border: none;
+      padding: 14px 36px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 8px 16px -5px #00000055;
+    }
+    button:hover {
+      transform: scale(1.02);
+      background: linear-gradient(95deg, #3ecf8e, #2c9c6e);
+      box-shadow: 0 12px 20px -8px black;
+    }
+    .result {
+      font-size: 1.5rem;
+      text-align: center;
+      padding: 20px;
+      border-radius: 40px;
+      margin-top: 30px;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #8ba8a8;
+      border-top: 1px solid #2a5a5a;
+      margin-top: 30px;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 768px) {
+      h1 { font-size: 2.2rem; }
+      .container { padding: 20px; }
+      .hero { padding: 30px 20px; }
+      .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Beautiful Background Image -->
-    <div class="bg-image"></div>
-    <div class="bg-gradient-overlay"></div>
 
-    <div class="overlay" id="overlay"></div>
+<div id="canvas-container"></div>
 
-    <!-- Dark Mode Toggle -->
-    <div class="dark-mode-toggle" id="darkModeToggle" aria-label="Dark mode toggle">
-        <i class="fas fa-moon"></i>
+<div class="content">
+<nav>
+  <div class="nav-container">
+    <a href="#home"><i class="fas fa-home"></i> Home</a>
+    <a href="#structure"><i class="fas fa-microscope"></i> Structure</a>
+    <a href="#function"><i class="fas fa-heartbeat"></i> Function</a>
+    <a href="#diagram"><i class="fas fa-chalkboard-user"></i> Diagram</a>
+    <a href="#quiz"><i class="fas fa-brain"></i> Quiz</a>
+  </div>
+</nav>
+
+<div class="container">
+  <!-- Hero with custom SVG illustration (self-contained) -->
+  <section id="home" class="hero">
+    <h1><i class="fas fa-fill-drip"></i> Nephron 3D Studio</h1>
+    <p>Explore the microscopic filtration unit of the kidney — 1 million nephrons per kidney, 180L filtrate daily, and the masterpiece of osmoregulation.</p>
+    <div class="hero-illustration">
+      <div class="hero-card">
+        <i class="fas fa-tint"></i>
+        <span class="hero-stats">1M+ nephrons/kidney</span>
+      </div>
+      <div class="hero-card">
+        <i class="fas fa-chart-line"></i>
+        <span class="hero-stats">180L filtrate/day</span>
+      </div>
+      <div class="hero-card">
+        <i class="fas fa-water"></i>
+        <span class="hero-stats">99% reabsorption</span>
+      </div>
     </div>
+    <!-- Beautiful custom nephron illustration vector (inline SVG) -->
+    <svg viewBox="0 0 500 280" xmlns="http://www.w3.org/2000/svg" style="max-width:100%; margin-top:20px">
+      <defs>
+        <linearGradient id="gradGlom" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#c44545;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="gradTube" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#3ecf8e;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#2a9d6e;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+      <!-- Glomerulus cluster -->
+      <circle cx="90" cy="110" r="28" fill="url(#gradGlom)" stroke="#fff" stroke-width="1.5" opacity="0.9"/>
+      <circle cx="80" cy="100" r="10" fill="#ff9999" opacity="0.7"/>
+      <circle cx="100" cy="118" r="8" fill="#ff8888" opacity="0.7"/>
+      <circle cx="85" cy="125" r="7" fill="#ffaaaa"/>
+      <!-- Bowman's capsule outline -->
+      <path d="M60 85 Q90 65 120 85 L125 140 Q90 160 55 140 Z" fill="none" stroke="#a5f0c0" stroke-width="2.5" stroke-dasharray="4 2"/>
+      <text x="65" y="70" fill="#b3ffd9" font-size="8">Bowman's Capsule</text>
+      <!-- Proximal convoluted tubule -->
+      <path d="M120 110 Q150 80 180 100 Q210 120 230 90 Q250 60 270 80" stroke="url(#gradTube)" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <!-- Loop of Henle U-shape -->
+      <path d="M270 80 Q290 110 285 150 Q280 190 250 200 Q220 210 200 190 Q180 170 175 140" stroke="#5edb9b" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <!-- Distal tubule -->
+      <path d="M175 140 Q160 120 150 100 Q140 80 120 70" stroke="#f0b27a" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <!-- Collecting duct -->
+      <path d="M120 70 Q100 90 95 130 Q90 170 100 200 Q110 230 130 250" stroke="#c49ae0" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <!-- Labels -->
+      <text x="130" y="65" fill="#fff" font-size="9" font-weight="bold">Proximal Tubule</text>
+      <text x="290" y="110" fill="#fff" font-size="9">Loop of Henle</text>
+      <text x="130" y="250" fill="#fff" font-size="9">Collecting Duct</text>
+      <text x="40" y="140" fill="#fff" font-size="9">Glomerulus</text>
+    </svg>
+    <p style="margin-top: 20px; font-size:0.9rem;"><i class="fas fa-cube"></i> Interactive 3D model floating in background — rotate with imagination!</p>
+  </section>
 
-    <!-- Menu button -->
-    <div class="menu-btn" id="openSidebar" aria-label="Menu">
-        <i class="fas fa-bars"></i>
+  <!-- Structure Section - detailed with custom icons -->
+  <section id="structure" class="section">
+    <h2><i class="fas fa-puzzle-piece"></i> Ultrastructure & Segments</h2>
+    <div class="card-grid">
+      <div class="card"><h3>🧬 Glomerulus</h3><svg viewBox="0 0 200 120"><circle cx="100" cy="60" r="35" fill="#dd4b6e" opacity="0.8"/><circle cx="90" cy="50" r="8" fill="#ffa0a0"/><circle cx="110" cy="65" r="6" fill="#ffbaba"/></svg><p>Fenestrated capillaries under high pressure (55-60 mmHg). Acts as selective filter — retains proteins & cells.</p></div>
+      <div class="card"><h3>🥣 Bowman's Capsule</h3><svg viewBox="0 0 200 120"><path d="M70 30 Q100 15 130 30 L135 90 Q100 110 65 90 Z" fill="none" stroke="#6abf8a" stroke-width="4"/><circle cx="100" cy="60" r="22" fill="#dd4b6e" opacity="0.6"/></svg><p>Double-walled epithelial cup; collects ultrafiltrate. Podocyte foot processes form filtration slits.</p></div>
+      <div class="card"><h3>🌀 Proximal Tubule</h3><svg viewBox="0 0 200 120"><path d="M80 60 Q110 40 130 65 Q150 90 170 70" stroke="#3aa8c7" stroke-width="8" fill="none"/></svg><p>Reabsorbs 65% Na⁺, 100% glucose & amino acids via brush border. Major solute recovery site.</p></div>
+      <div class="card"><h3>📏 Loop of Henle</h3><svg viewBox="0 0 200 120"><path d="M80 30 Q95 50 95 80 Q95 110 70 110 Q45 110 45 80 Q45 50 60 35" stroke="#7dcd85" stroke-width="7" fill="none"/></svg><p>Countercurrent multiplier creates medullary gradient; crucial for water conservation.</p></div>
+      <div class="card"><h3>⚡ Distal Tubule</h3><svg viewBox="0 0 200 120"><path d="M50 60 Q70 40 90 55 Q110 70 130 50" stroke="#e8aa42" stroke-width="6" fill="none"/></svg><p>Hormonal regulation (aldosterone, PTH). Fine-tuning of Ca²⁺, Na⁺, pH balance.</p></div>
+      <div class="card"><h3>🌊 Collecting Duct</h3><svg viewBox="0 0 200 120"><rect x="70" y="20" width="40" height="90" rx="10" fill="#bd8fcf" opacity="0.7"/><text x="80" y="70" fill="white" font-size="12">CD</text></svg><p>Final osmoregulation under ADH control; concentrates urine up to 1200 mOsm/L.</p></div>
     </div>
+  </section>
 
-    <!-- Sidebar -->
-    <div id="sidebar">
-        <div class="sidebar-header">
-            <span class="logo-side"><i class="fas fa-cube"></i> RAMODA</span>
-            <div class="closebtn" id="closeSidebarBtn"><i class="fas fa-times"></i></div>
-        </div>
-        <a href="welcome.html"><i class="fas fa-home"></i> Home</a>
-        <a href="About.html"><i class="fas fa-info-circle"></i> About</a>
-        <a href="partnership.html"><i class="fas fa-handshake"></i> Partnership</a>
-        <a href="comment.html"><i class="fas fa-comment-dots"></i> Comment</a>
-        <a href="faq.html"><i class="fas fa-question-circle"></i> FAQ</a>
-        <a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a>
+  <!-- Function Section with video placeholders + advanced insight -->
+  <section id="function" class="section">
+    <h2><i class="fas fa-chart-line"></i> Dynamic Physiology: 3 Core Processes</h2>
+    <div class="card-grid">
+      <div class="card"><h3>💧 Filtration</h3><video width="100%" height="160" controls poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%231f4f4f'/%3E%3Ctext x='50' y='60' fill='%233ecf8e' font-size='14'%3EFiltration Demo%3C/text%3E%3C/svg%3E"><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video><p>Hydrostatic pressure drives fluid into Bowman's space. GFR ~125 mL/min, regulated by autoregulation.</p></div>
+      <div class="card"><h3>🔄 Reabsorption</h3><video width="100%" height="160" controls poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%231f4f4f'/%3E%3Ctext x='40' y='60' fill='%233ecf8e' font-size='14'%3EReabsorption%3C/text%3E%3C/svg%3E"><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video><p>Active transport reclaims water, glucose, ions. Na⁺/K⁺ ATPase powers 99% efficiency.</p></div>
+      <div class="card"><h3>🧪 Secretion</h3><video width="100%" height="160" controls poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 120'%3E%3Crect width='200' height='120' fill='%231f4f4f'/%3E%3Ctext x='45' y='60' fill='%233ecf8e' font-size='14'%3ESecretion%3C/text%3E%3C/svg%3E"><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"></video><p>Adds H⁺, K⁺, drugs into tubule lumen; essential for acid-base homeostasis and toxin removal.</p></div>
     </div>
+    <div style="margin-top: 20px; background: #1e3a3a80; border-radius: 28px; padding: 20px;"><i class="fas fa-chart-simple"></i> <strong>Advanced Insight:</strong> The countercurrent multiplier generates up to 1200 mOsm/kg osmotic gradient — enabling mammals to produce hypertonic urine and survive arid environments.</div>
+  </section>
 
-    <div class="main-content" id="mainContent">
-        <!-- Hero section with image -->
-        <div class="hero-section fade-up">
-            <div class="hero-content">
-                <div class="hero-badge"><i class="fas fa-microchip"></i> Next‑gen software ecosystem</div>
-                <h1>Where code meets <span class="gradient-text">intelligence</span><br>RAMODA Software Technology</h1>
-                <p class="lead-text">Revolutionize operations with AI-driven platforms, cloud-native agility, and human-centric design. Built for scale, crafted for excellence.</p>
-            </div>
-            <div class="hero-image">
-                <img src="photo_2026-04-18_00-36-07.jpg" alt="RAMODA Software Technology">
-            </div>
-        </div>
-
-        <p class="description fade-up">
-            RAMODA Software Technology is a leading innovator in the tech industry, committed to delivering 
-            cutting-edge software solutions that revolutionize the way businesses operate. Our team of 
-            experienced developers, designers, and strategists work together to create seamless user 
-            experiences and robust applications that cater to the needs of our diverse clientele.
-        </p>
-
-        <!-- Stats row -->
-        <div class="stats-row fade-up">
-            <div class="stat-card"><span class="stat-number">200+</span><br>Enterprise solutions</div>
-            <div class="stat-card"><span class="stat-number">98%</span><br>Client satisfaction</div>
-            <div class="stat-card"><span class="stat-number">24/7</span><br>Support & innovation</div>
-            <div class="stat-card"><span class="stat-number">50+</span><br>Global experts</div>
-        </div>
-
-        <!-- Service Cards with Images -->
-        <div class="services-showcase fade-up">
-            <div class="service-card">
-                <img class="service-img" src="https://www.global-csg.com/wp-content/uploads/2024/08/How-Artificial-Intelligence-AI-and-Machine-Learning-ML-Would-Impact-the-Future-of-Engineering_.jpg" alt="AI & Machine Learning">
-                <div class="service-content">
-                    <i class="fas fa-brain service-icon"></i>
-                    <h3>AI & Machine Learning</h3>
-                    <p>Intelligent automation, predictive analytics, and computer vision that drives real business decisions with 99.9% accuracy.</p>
-                </div>
-            </div>
-            <div class="service-card">
-                <img class="service-img" src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&auto=format" alt="Mobile Development">
-                <div class="service-content">
-                    <i class="fas fa-mobile-alt service-icon"></i>
-                    <h3>Mobile First</h3>
-                    <p>iOS, Android, cross-platform apps with fluid UX, biometric security, and offline-first architecture for seamless experiences.</p>
-                </div>
-            </div>
-            <div class="service-card">
-                <img class="service-img" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format" alt="Cloud Computing">
-                <div class="service-content">
-                    <i class="fas fa-cloud-upload-alt service-icon"></i>
-                    <h3>Cloud Native</h3>
-                    <p>AWS, Azure, Kubernetes — scalable infrastructure, serverless solutions, and 99.99% uptime guaranteed.</p>
-                </div>
-            </div>
-        </div>
-
-        <p class="description fade-up">
-            We specialize in developing customized software, mobile applications, and enterprise solutions that 
-            drive efficiency and growth. Our approach is client-centric, focusing on understanding the unique 
-            challenges faced by businesses and providing tailored solutions that deliver measurable results.
-        </p>
-
-        <!-- Highlight Card -->
-        <div class="highlight-card fade-up">
-            <i class="fas fa-rocket" style="font-size: 2rem; color: var(--accent); margin-bottom: 0.6rem; display: inline-block;"></i>
-            <p style="font-weight: 500; margin-bottom: 1rem;">🚀 Ready to accelerate your digital journey? Explore our service portfolio or grab the RAMODA companion app.</p>
-            <div class="buttons-container" style="margin-top: 0.5rem;">
-                <button class="btn btn-primary" id="servicesBtn"><i class="fas fa-cog"></i> OUR SERVICES</button>
-                <button class="btn btn-outline" id="downloadBtn"><i class="fas fa-download"></i> DOWNLOAD APP</button>
-            </div>
-        </div>
-
-        <!-- Testimonial Section -->
-        <div class="testimonial-section fade-up">
-            <h3 style="margin-bottom: 1rem; font-size: 1.8rem;"><i class="fas fa-quote-left" style="color: var(--accent);"></i> Trusted by industry leaders</h3>
-            <div class="testimonial-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"RAMODA's AI solutions transformed our data infrastructure. Their team's expertise and dedication increased our efficiency by over 40% in just 6 months."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/women/89.jpg" alt="Kidist Lema">
-                        <div>
-                            <div class="author-name">Kidist Lema</div>
-                            <div class="author-title">Chief Technology Officer, EthioTech</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"The mobile platform RAMODA built for us exceeded all expectations. Seamless UX, robust security, and on-time delivery. Highly recommended!"</p>
-                    <div class="testimonial-author">
-                        <img src="photo_2_2026-04-17_23-01-00.jpg" alt="Faris Debela">
-                        <div>
-                            <div class="author-name">Faris Debela</div>
-                            <div class="author-title">CEO, Digital Horizon</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"RAMODA's cloud migration strategy saved us 35% in operational costs. Their support team is exceptional and always available when we need them."</p>
-                    <div class="testimonial-author">
-                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Dhekebete Leggese">
-                        <div>
-                            <div class="author-name">Dhekebete Leggese</div>
-                            <div class="author-title">VP of Engineering, Innovate Solutions</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Social Media -->
-        <div class="social-section fade-up">
-            <div class="social-title"><i class="fas fa-share-alt"></i> Connect with RAMODA</div>
-            <div class="social-icons">
-                <a href="https://www.youtube.com/channel/your-channel-id?sub_confirmation=3" target="_blank" rel="noopener"><i class="fab fa-youtube"></i> YouTube</a>
-                <a href="https://www.facebook.com/your-page" target="_blank" rel="noopener"><i class="fab fa-facebook"></i> Facebook</a>
-                <a href="https://www.instagram.com/your-profile" target="_blank" rel="noopener"><i class="fab fa-instagram"></i> Instagram</a>
-                <a href="https://www.twitter.com/your-profile" target="_blank" rel="noopener"><i class="fab fa-twitter"></i> Twitter</a>
-                <a href="https://www.linkedin.com/company/your-company" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            </div>
-        </div>
-        <div class="footer-note">
-            <i class="far fa-copyright"></i> 2025 RAMODA Software Technology — Innovate. Transform. Lead.
-        </div>
+  <!-- Diagram Section - with custom designed SVG labeling -->
+  <section id="diagram" class="section">
+    <h2><i class="fas fa-cube"></i> Labeled Nephron Diagram</h2>
+    <div class="diagram-wrapper">
+      <div class="diagram">
+        <svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg" style="background:#fafaf5; border-radius:24px">
+          <defs><linearGradient id="tubuleGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3ecf8e"/><stop offset="100%" stop-color="#217a55"/></linearGradient></defs>
+          <!-- Glomerulus -->
+          <circle cx="150" cy="130" r="38" fill="#e05a5a" opacity="0.9"/>
+          <circle cx="140" cy="120" r="12" fill="#ffaeae"/>
+          <circle cx="160" cy="140" r="10" fill="#ff9e9e"/>
+          <circle cx="145" cy="148" r="8" fill="#ffbebe"/>
+          <!-- Bowman's capsule -->
+          <path d="M105 90 Q150 60 195 90 L205 170 Q150 200 95 170 Z" fill="none" stroke="#3ecf8e" stroke-width="3" stroke-dasharray="5 3"/>
+          <!-- Proximal tubule -->
+          <path d="M205 130 Q250 100 290 120 Q330 140 360 110 Q390 80 420 100" stroke="url(#tubuleGrad)" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <!-- Loop of Henle -->
+          <path d="M420 100 Q450 140 440 200 Q430 260 390 280 Q350 300 310 280 Q280 260 270 210" stroke="#5dcb8c" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <!-- Distal -->
+          <path d="M270 210 Q250 170 230 140 Q210 110 180 90" stroke="#f0b27a" stroke-width="8" fill="none"/>
+          <!-- Collecting duct -->
+          <path d="M180 90 Q160 120 155 180 Q150 240 170 300 Q190 360 230 390" stroke="#b794d4" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <!-- Labels -->
+          <text x="100" y="75" fill="#1a4d4d" font-size="12" font-weight="bold">Bowman's Capsule</text>
+          <text x="50" y="120" fill="#b34b4b" font-size="12" font-weight="bold">Glomerulus</text>
+          <text x="280" y="80" fill="#2c7a4a" font-size="12">Proximal Tubule</text>
+          <text x="450" y="170" fill="#2c7a4a" font-size="12">Loop of Henle</text>
+          <text x="210" y="75" fill="#b86b2c" font-size="12">Distal Tubule</text>
+          <text x="240" y="380" fill="#6e4094" font-size="12">Collecting Duct</text>
+        </svg>
+      </div>
+      <p style="text-align:center; margin-top: 20px;"><i class="fas fa-info-circle"></i> Each segment performs specialized transport — click through sections to master renal physiology.</p>
     </div>
+  </section>
 
-    <script>
-        (function() {
-            // Sidebar elements
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            const openBtn = document.getElementById('openSidebar');
-            const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-            
-            function openSidebarFunc() {
-                sidebar.classList.add('active');
-                overlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-            
-            function closeSidebarFunc() {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            
-            function toggleSidebar() {
-                if (sidebar.classList.contains('active')) {
-                    closeSidebarFunc();
-                } else {
-                    openSidebarFunc();
-                }
-            }
-            
-            if (openBtn) openBtn.addEventListener('click', toggleSidebar);
-            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebarFunc);
-            if (overlay) overlay.addEventListener('click', closeSidebarFunc);
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && sidebar.classList.contains('active')) {
-                    closeSidebarFunc();
-                }
-            });
-            
-            // Buttons for services & download
-            const servicesButton = document.getElementById('servicesBtn');
-            const downloadButton = document.getElementById('downloadBtn');
-            if (servicesButton) {
-                servicesButton.addEventListener('click', () => window.location.href = 'sites.html');
-            }
-            if (downloadButton) {
-                downloadButton.addEventListener('click', () => window.location.href = 'Dowload.html');
-            }
-            
-            // DARK MODE TOGGLE
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const icon = darkModeToggle.querySelector('i');
-            
-            const savedTheme = localStorage.getItem('ramoda-theme');
-            if (savedTheme === 'dark') {
-                document.body.classList.add('dark');
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            } else if (savedTheme === 'light') {
-                document.body.classList.remove('dark');
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            } else {
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    document.body.classList.add('dark');
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    localStorage.setItem('ramoda-theme', 'dark');
-                }
-            }
-            
-            darkModeToggle.addEventListener('click', () => {
-                if (document.body.classList.contains('dark')) {
-                    document.body.classList.remove('dark');
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    localStorage.setItem('ramoda-theme', 'light');
-                } else {
-                    document.body.classList.add('dark');
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    localStorage.setItem('ramoda-theme', 'dark');
-                }
-            });
-            
-            // Intersection Observer for scroll animations
-            const fadeElements = document.querySelectorAll('.fade-up');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('revealed');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.15, rootMargin: "0px 0px -40px 0px" });
-            
-            fadeElements.forEach(el => observer.observe(el));
-            
-            window.addEventListener('load', () => {
-                fadeElements.forEach(el => {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top < window.innerHeight - 100) {
-                        el.classList.add('revealed');
-                        observer.unobserve(el);
-                    }
-                });
-                document.body.style.overflow = '';
-            });
-            
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 1024 && sidebar.classList.contains('active')) {
-                    closeSidebarFunc();
-                }
-            });
-        })();
-    </script>
+  <!-- Quiz Section -->
+  <section id="quiz" class="quiz-container">
+    <h2><i class="fas fa-graduation-cap"></i> Master the Nephron: Advanced Quiz</h2>
+    <p>Test your knowledge — 7 challenging questions with instant feedback.</p>
+    <form id="quizForm">
+      <div class="question"><p>1️⃣ Which structure forms the filtration barrier with podocytes?</p><label><input type="radio" name="q1" value="a"> Proximal tubule</label><br><label><input type="radio" name="q1" value="b"> Glomerulus + Bowman's capsule</label><br><label><input type="radio" name="q1" value="c"> Loop of Henle</label></div>
+      <div class="question"><p>2️⃣ What is the primary driving force for glomerular filtration?</p><label><input type="radio" name="q2" value="a"> Osmotic pressure</label><br><label><input type="radio" name="q2" value="b"> Hydrostatic blood pressure</label><br><label><input type="radio" name="q2" value="c"> Active transport</label></div>
+      <div class="question"><p>3️⃣ Where does the majority of glucose reabsorption occur?</p><label><input type="radio" name="q3" value="a"> Distal tubule</label><br><label><input type="radio" name="q3" value="b"> Proximal convoluted tubule</label><br><label><input type="radio" name="q3" value="c"> Collecting duct</label></div>
+      <div class="question"><p>4️⃣ The countercurrent multiplier is a function of which segment?</p><label><input type="radio" name="q4" value="a"> Glomerulus</label><br><label><input type="radio" name="q4" value="b"> Loop of Henle</label><br><label><input type="radio" name="q4" value="c"> Proximal tubule</label></div>
+      <div class="question"><p>5️⃣ Which hormone directly increases water reabsorption via aquaporins?</p><label><input type="radio" name="q5" value="a"> Aldosterone</label><br><label><input type="radio" name="q5" value="b"> ADH (Vasopressin)</label><br><label><input type="radio" name="q5" value="c"> Renin</label></div>
+      <div class="question"><p>6️⃣ Which process adds hydrogen ions to regulate blood pH?</p><label><input type="radio" name="q6" value="a"> Filtration</label><br><label><input type="radio" name="q6" value="b"> Reabsorption</label><br><label><input type="radio" name="q6" value="c"> Secretion</label></div>
+      <div class="question"><p>7️⃣ The final concentration of urine is primarily determined by:</p><label><input type="radio" name="q7" value="a"> GFR</label><br><label><input type="radio" name="q7" value="b"> Medullary gradient + ADH</label><br><label><input type="radio" name="q7" value="c"> Proximal reabsorption</label></div>
+      <div style="text-align:center;"><button type="button" onclick="checkAdvancedAnswers()"><i class="fas fa-check-circle"></i> Evaluate Score</button></div>
+    </form>
+    <div class="result" id="result"></div>
+  </section>
+</div>
+<footer><i class="fas fa-microscope"></i> Immersive Nephron Model | Real-time 3D Background | Educational Resource</footer>
+</div>
+
+<script type="module">
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+  const container = document.getElementById('canvas-container');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x071a1a);
+  scene.fog = new THREE.FogExp2(0x071a1a, 0.012);
+  
+  const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(4.5, 3.2, 7);
+  camera.lookAt(0, 0.5, 0);
+  
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  container.appendChild(renderer.domElement);
+  
+  const labelRenderer = new CSS2DRenderer();
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.domElement.style.position = 'absolute';
+  labelRenderer.domElement.style.top = '0px';
+  labelRenderer.domElement.style.left = '0px';
+  labelRenderer.domElement.style.pointerEvents = 'none';
+  container.appendChild(labelRenderer.domElement);
+  
+  // Lights
+  const ambient = new THREE.AmbientLight(0x2c3e3e);
+  scene.add(ambient);
+  const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  mainLight.position.set(2, 5, 3);
+  mainLight.castShadow = true;
+  scene.add(mainLight);
+  const fill = new THREE.PointLight(0x3ecf8e, 0.5);
+  fill.position.set(1, 2, 2);
+  scene.add(fill);
+  
+  // Abstract 3D Nephron Sculpture
+  const nephronGroup = new THREE.Group();
+  // Glomerulus
+  const glom = new THREE.Mesh(new THREE.SphereGeometry(0.6, 32, 32), new THREE.MeshStandardMaterial({ color: 0xdd4b6e, emissive: 0x441122, roughness: 0.3 }));
+  glom.position.set(-1.3, 1.2, 0);
+  nephronGroup.add(glom);
+  // Bowman capsule ring
+  const bowmanRing = new THREE.Mesh(new THREE.TorusGeometry(0.85, 0.05, 32, 100), new THREE.MeshStandardMaterial({ color: 0x6abf8a }));
+  bowmanRing.position.set(-1.3, 1.2, 0);
+  bowmanRing.rotation.x = Math.PI / 2;
+  nephronGroup.add(bowmanRing);
+  // Proximal tube curve
+  const curvePts = [new THREE.Vector3(-0.6, 0.9, 0.2), new THREE.Vector3(0, 0.7, 0.4), new THREE.Vector3(0.6, 0.3, 0.1), new THREE.Vector3(0.9, -0.2, -0.2)];
+  const tubeGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(curvePts), 40, 0.12, 8);
+  const proximalTube = new THREE.Mesh(tubeGeo, new THREE.MeshStandardMaterial({ color: 0x3aa8c7 }));
+  nephronGroup.add(proximalTube);
+  // Loop of Henle U shape
+  const loopPts = [new THREE.Vector3(0.9, -0.2, -0.2), new THREE.Vector3(1.1, -0.7, -0.1), new THREE.Vector3(0.7, -1.2, 0), new THREE.Vector3(0.1, -1.0, 0.2), new THREE.Vector3(-0.3, -0.5, 0.3)];
+  const loopGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(loopPts), 50, 0.11, 8);
+  const loopHenle = new THREE.Mesh(loopGeo, new THREE.MeshStandardMaterial({ color: 0x7dcd85 }));
+  nephronGroup.add(loopHenle);
+  // Distal + Collecting
+  const distalPts = [new THREE.Vector3(-0.3, -0.5, 0.3), new THREE.Vector3(-0.7, -0.2, 0.5), new THREE.Vector3(-1.1, 0.1, 0.7)];
+  const distalGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(distalPts), 30, 0.1, 8);
+  const distal = new THREE.Mesh(distalGeo, new THREE.MeshStandardMaterial({ color: 0xe8aa42 }));
+  nephronGroup.add(distal);
+  const collectingPts = [new THREE.Vector3(-1.1, 0.1, 0.7), new THREE.Vector3(-1.4, -0.3, 0.9), new THREE.Vector3(-1.7, -0.9, 1.0)];
+  const collectingGeo = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(collectingPts), 40, 0.13, 8);
+  const collecting = new THREE.Mesh(collectingGeo, new THREE.MeshStandardMaterial({ color: 0xbd8fcf }));
+  nephronGroup.add(collecting);
+  scene.add(nephronGroup);
+  
+  // Particles & decorative rings
+  const particleCount = 800;
+  const particleGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    positions[i*3] = (Math.random() - 0.5) * 12;
+    positions[i*3+1] = (Math.random() - 0.5) * 8;
+    positions[i*3+2] = (Math.random() - 0.5) * 10 - 3;
+  }
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const particlesMat = new THREE.PointsMaterial({ color: 0x3ecf8e, size: 0.04, transparent: true, opacity: 0.4 });
+  const particlesSys = new THREE.Points(particleGeo, particlesMat);
+  scene.add(particlesSys);
+  
+  const orbRing = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.04, 64, 200), new THREE.MeshStandardMaterial({ color: 0x3ecf8e, emissive: 0x1a5a3a }));
+  orbRing.rotation.x = Math.PI / 2;
+  scene.add(orbRing);
+  
+  // CSS2D Labels
+  function addLabel(text, x, y, z) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    div.style.color = '#d4f5e5';
+    div.style.fontSize = '12px';
+    div.style.fontWeight = 'bold';
+    div.style.background = 'rgba(0,30,30,0.7)';
+    div.style.padding = '2px 10px';
+    div.style.borderRadius = '20px';
+    div.style.borderLeft = '3px solid #3ecf8e';
+    div.style.backdropFilter = 'blur(4px)';
+    const label = new CSS2DObject(div);
+    label.position.set(x, y, z);
+    scene.add(label);
+  }
+  addLabel('Glomerulus', -1.3, 1.7, 0);
+  addLabel("Bowman's Capsule", -1.8, 1.2, 0.4);
+  addLabel('Proximal Tubule', -0.1, 1.0, 0.7);
+  addLabel('Loop of Henle', 1.0, -0.5, 0.4);
+  addLabel('Distal Tubule', -0.9, 0.0, 1.1);
+  addLabel('Collecting Duct', -2.0, -0.6, 1.3);
+  
+  let time = 0;
+  function animate3D() {
+    requestAnimationFrame(animate3D);
+    time += 0.006;
+    nephronGroup.rotation.y = Math.sin(time * 0.2) * 0.2;
+    nephronGroup.rotation.x = Math.sin(time * 0.15) * 0.08;
+    orbRing.rotation.z += 0.003;
+    particlesSys.rotation.y += 0.0008;
+    particlesSys.rotation.x = Math.sin(time * 0.1) * 0.05;
+    camera.lookAt(0, 0.2, 0);
+    renderer.render(scene, camera);
+    labelRenderer.render(scene, camera);
+  }
+  animate3D();
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+
+<script>
+function checkAdvancedAnswers() {
+  let score = 0;
+  const ans = { q1: "b", q2: "b", q3: "b", q4: "b", q5: "b", q6: "c", q7: "b" };
+  for (let q in ans) {
+    const selected = document.querySelector(`input[name="${q}"]:checked`);
+    if (selected && selected.value === ans[q]) score++;
+  }
+  const resDiv = document.getElementById("result");
+  if (score === 7) resDiv.innerHTML = "🏆 PERFECT! You've mastered nephron physiology! 🏆";
+  else if (score >= 5) resDiv.innerHTML = `✨ Great! Score ${score}/7. Keep exploring renal biology! ✨`;
+  else resDiv.innerHTML = `📘 Score ${score}/7. Review the diagrams & try again! 📘`;
+  resDiv.style.background = "#1e4a4aaa";
+  resDiv.style.color = "#f0f9ff";
+}
+</script>
 </body>
 </html>
